@@ -1,0 +1,67 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "name": "Debug Kernel",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "/usr/src/kernels/linux-4.18.20/vmlinux",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "avoidWindowsConsoleRedirection": true,
+            "preLaunchTask": "Trigger kernel",
+             
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+
+            "targetArchitecture": "x86_64",
+            "miDebuggerPath": "/opt/rh/gcc-toolset-10/root/bin/gdb",
+            "miDebuggerArgs": "",
+
+            "customLaunchSetupCommands": [
+                {
+                    "text": "target remote 10.0.2.2:2345",
+                    "description": "Connect to vagrant kernel remote debugger"
+                },
+                {
+                    "text": "add-symbol-file /vagrant/zfs_tiering/module/zfs/zfs.ko ${input:module_location}",
+                    "description": "Get kernel symbols"
+                }
+            ],
+        },
+    ],
+    
+    "inputs": [
+        {
+            "id": "module_load",
+            "type": "command",
+            "command": "shellCommand.execute",
+            "args":{
+                "command": "ssh -o StrictHostKeyChecking=no root@10.0.3.3 /vagrant/zfs_tiering/scripts/zfs.sh"
+            },       
+        },
+        {
+            "id": "module_location",
+            "type": "command",
+            "command": "shellCommand.execute",
+            "args":{
+                "command": "ssh -o StrictHostKeyChecking=no root@10.0.3.3 cat /sys/module/zfs/sections/.text"
+            },       
+        }
+    ],
+}
+
+

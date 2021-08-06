@@ -1,0 +1,48 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "cppbuild",
+			"label": "C/C++: gcc build active file",
+			"command": "/usr/bin/gcc",
+			"args": [
+				"-g",
+				"${file}",
+				"-o",
+				"${fileDirname}/${fileBasenameNoExtension}"
+			],
+			"options": {
+				"cwd": "${fileDirname}"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"detail": "compiler: /usr/bin/gcc"
+		}, 
+		{
+			"type": "shell",
+			"label": "Load ZFS module",
+			"command": "ssh",
+			"args": [
+				"root@10.0.3.3",
+				"/vagrant/zfs_tiering/scripts/zfs.sh"
+			],
+		},
+
+		{
+			"type": "shell",
+			"label": "Trigger kernel",
+			"command": "ssh",
+			"args": [
+				"root@10.0.3.3",
+				"echo g > /proc/sysrq-trigger"
+			],
+			"isBackground": true,
+			"problemMatcher": "$tsc"
+		}
+	]
+}
